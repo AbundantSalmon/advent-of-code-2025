@@ -4,7 +4,7 @@ All solutions completed in Kotlin
 
 | Day | Part 1 | Part 2 |
 |:----|:-------|:-------|
-| 1   |        |        |
+| 1   | ⭐️     | ⭐️     |
 | 2   |        |        |
 | 3   |        |        |
 | 4   |        |        |
