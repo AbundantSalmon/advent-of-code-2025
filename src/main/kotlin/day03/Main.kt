@@ -1,6 +1,7 @@
 package day03
 
 import utils.FileUtils
+import java.util.Stack
 
 fun main() {
     val filename = "input03.txt"
@@ -44,36 +45,21 @@ fun part2(lines: List<String>) {
     var sumOfJoltage = 0L
 
     for (line in lines) {
-        val numbers = line.map { it.toString().toInt() }
+        val numbers = line.map { it.toString().toInt() }.toMutableList()
 
-        var startIndex = numbers.size - 1 - 12
-        // search backwards for largest number
-        for (value in startIndex downTo 0) {
-            if (numbers[value] >= numbers[startIndex]) {
-                startIndex = value
+        val stack = Stack<Int>()
+        stack.push(numbers.removeFirst())
+        while (numbers.isNotEmpty()) {
+            val value = numbers.removeFirst()
+            val remainingSize = numbers.size
+
+            while (stack.isNotEmpty() && stack.peek() < value && remainingSize + stack.size >= 12) {
+                stack.pop()
             }
+            stack.push(value)
         }
 
-        val sequence = numbers.subList(startIndex, startIndex + 12).toMutableList()
-        var minIndex = indexOfMinInTheRight(sequence)
-        for (value in numbers.subList(startIndex + 12, numbers.size)) {
-            if (value >= sequence[minIndex]) {
-                sequence.removeAt(minIndex)
-                sequence.add(value)
-                minIndex = indexOfMinInTheRight(sequence)
-            }
-        }
-        sumOfJoltage += sequence.joinToString("").toLong()
+        sumOfJoltage += stack.take(12).joinToString("").toLong()
     }
     println(sumOfJoltage)
-}
-
-fun indexOfMinInTheRight(numbers: List<Int>): Int {
-    var index = 0
-    for (i in 0..<numbers.size) {
-        if (numbers[i] < numbers[index]) {
-            index = i
-        }
-    }
-    return index
 }
